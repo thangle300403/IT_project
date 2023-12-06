@@ -1,0 +1,275 @@
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: badmin2
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+CREATE SCHEMA `badmin2`
+
+--
+-- Table structure for table `download`
+--
+
+DROP TABLE IF EXISTS `download`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `download` (
+  `DOWNLOADID` bigint NOT NULL,
+  `DOWNLOADDATE` date DEFAULT NULL,
+  `PRODUCTCODE` varchar(255) DEFAULT NULL,
+  `USER_USERID` bigint DEFAULT NULL,
+  PRIMARY KEY (`DOWNLOADID`),
+  KEY `FK_DOWNLOAD_USER_USERID` (`USER_USERID`),
+  CONSTRAINT `FK_DOWNLOAD_USER_USERID` FOREIGN KEY (`USER_USERID`) REFERENCES `user` (`USERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `download`
+--
+
+LOCK TABLES `download` WRITE;
+/*!40000 ALTER TABLE `download` DISABLE KEYS */;
+INSERT INTO `download` VALUES (3352,'2023-11-29','pf02',3351);
+/*!40000 ALTER TABLE `download` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoice`
+--
+
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoice` (
+  `INVOICENUMBER` bigint NOT NULL,
+  `INVOICEDATE` date DEFAULT NULL,
+  `ISPROCESSED` tinyint(1) DEFAULT '0',
+  `USER_USERID` bigint DEFAULT NULL,
+  PRIMARY KEY (`INVOICENUMBER`),
+  KEY `FK_INVOICE_USER_USERID` (`USER_USERID`),
+  CONSTRAINT `FK_INVOICE_USER_USERID` FOREIGN KEY (`USER_USERID`) REFERENCES `user` (`USERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice`
+--
+
+LOCK TABLES `invoice` WRITE;
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+INSERT INTO `invoice` VALUES (3353,'2023-11-29',1,3351),(3401,'2023-11-30',0,3351);
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoice_lineitem`
+--
+
+DROP TABLE IF EXISTS `invoice_lineitem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoice_lineitem` (
+  `Invoice_INVOICENUMBER` bigint NOT NULL,
+  `lineItems_LINEITEMID` bigint NOT NULL,
+  PRIMARY KEY (`Invoice_INVOICENUMBER`,`lineItems_LINEITEMID`),
+  KEY `FK_INVOICE_LINEITEM_lineItems_LINEITEMID` (`lineItems_LINEITEMID`),
+  CONSTRAINT `FK_INVOICE_LINEITEM_Invoice_INVOICENUMBER` FOREIGN KEY (`Invoice_INVOICENUMBER`) REFERENCES `invoice` (`INVOICENUMBER`),
+  CONSTRAINT `FK_INVOICE_LINEITEM_lineItems_LINEITEMID` FOREIGN KEY (`lineItems_LINEITEMID`) REFERENCES `lineitem` (`LINEITEMID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice_lineitem`
+--
+
+LOCK TABLES `invoice_lineitem` WRITE;
+/*!40000 ALTER TABLE `invoice_lineitem` DISABLE KEYS */;
+INSERT INTO `invoice_lineitem` VALUES (3353,3354),(3401,3402),(3401,3403);
+/*!40000 ALTER TABLE `invoice_lineitem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lineitem`
+--
+
+DROP TABLE IF EXISTS `lineitem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lineitem` (
+  `LINEITEMID` bigint NOT NULL,
+  `QUANTITY` int DEFAULT NULL,
+  `PRODUCT_PRODUCTID` bigint DEFAULT NULL,
+  PRIMARY KEY (`LINEITEMID`),
+  KEY `FK_LINEITEM_PRODUCT_PRODUCTID` (`PRODUCT_PRODUCTID`),
+  CONSTRAINT `FK_LINEITEM_PRODUCT_PRODUCTID` FOREIGN KEY (`PRODUCT_PRODUCTID`) REFERENCES `product` (`PRODUCTID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lineitem`
+--
+
+LOCK TABLES `lineitem` WRITE;
+/*!40000 ALTER TABLE `lineitem` DISABLE KEYS */;
+INSERT INTO `lineitem` VALUES (3354,5,102),(3402,1,116),(3403,1,101);
+/*!40000 ALTER TABLE `lineitem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `PRODUCTID` bigint NOT NULL,
+  `CODE` varchar(255) DEFAULT NULL,
+  `DESCRIPTION` varchar(255) DEFAULT NULL,
+  `IMAGE` varchar(255) DEFAULT NULL,
+  `PRICE` double DEFAULT NULL,
+  `DETAIL` varchar(5000) DEFAULT NULL,
+  PRIMARY KEY (`PRODUCTID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (101,'8601','Racket - Yonex Astrox 99','astrox99.png',140.95,'Yonex employs \"NAMD\" throughout the racket, including the frame, doubling the contact time with the shuttle for increased power'),(102,'pf01','Racket - Yonex Astrox 99 pro','astrox99pro.png',120.95,'The Yonex Astrox 99 Pro White version boasts the revolutionary ISOMETRIC™ signature, enhancing the sweet spot for improved gameplay'),(103,'pf02','Racket - Yonex Astrox 88d','Astrox88d.png',140.95,'The Astrox 88D has an overall length over 10mm longer, contributing to excellent smashing power'),(104,'jr01','Racket - Yonex Astrox 88d pro','astrox88dpro.png',140.95,'The Yonex Astrox 88D Pro is a badminton racket designed for rear-court players, providing a balance of power and control for explosive smashes[1]. It gained success among top doubles players at the Yonex All England 2021[2].'),(105,'as100','Racket - Yonex Astrox 100zz ','astrox100zz.png',150,'The Yonex Astrox 100ZZ is a badminton racket designed for powerful and aggressive play. It comes in two versions, 3U and 4U, with a handle size suitable for most players'),(106,'nano9000','Racket - Yonex Nanoflare1000z','nano9000z.png',150,'The Yonex Nanoflare 1000Z is a badminton racket designed for lightweight and flexible gameplay. It features a head-light design, providing agility in every shot. The racket is known for its ability to deliver speed and spin, making it suitable for players seeking enhanced performance.'),(107,'casdr','Shoes - Yonex Cascade Drive','cascadeDrive.png',14.2,'Yonex domestic Yonex badminton shoes Cascade Drive orange and black (code Korea) is one of the latest badminton shoe models newly launched in January 2022, combining comfort and lightness to help players take steps. Move gracefully and gracefully on the field.'),(108,'eclip','Shoes - Yonex Eclipsion X3','eclipsion.png',14.2,'Genuine Yonex Eclipsion X3 - White Black is equipped with the LATERAL SHELL + STABILITY REINFORCEMENT system that provides certainty in multi-directional movement with a hard rubber plate added to the side wall of the shoe. Thanks to that, players can feel completely secure during forward or horizontal movements without worrying about turning their ankles. Besides, this technology also increases wear, helping shoes last longer.'),(109,'comf','Shoes - Yonex Comfort Z3','comfortz3.png',140.2,'The Power Cushion Comfort line of badminton shoes excels in comfort and high propulsion. Genuine Yonex Comfort Z3 Badminton Shoes - White belongs to Yonex\'s highest-end segment. Each pair of Comfort Z3 shoes is meticulously manufactured, highly finished, durable and brings the best experience to players.'),(110,'65z3','Shoes - Yonex 65z3','65z3.png',14.2,'Developed from the Power Cushion Z series, this is the latest improved version, capturing all of Yonex\'s leading technological advances. A particularly outstanding feature of these shoes is Power Cushion technology, which helps minimize pressure when setting your foot on the court and helps you move faster and more flexibly on the badminton court. Besides, the quality and durability of this product is remarkable, guaranteed to accompany you for two years or more.'),(111,'aerus','Shoes - Yonex Aerus z2','areus.png',14.2,'The shoe is made thinner using a new sole made of Feather Light A key ingredient to stability is a reliable grip. RADIAL BLADE SOLE is made to provide ultimate grip.'),(112,'massaz','Massage - Azaki Maxxspeed CS20','massage.png',4130,'The Azaki Maxxspeed CS20 is a high-end massage chair that integrates 4 automatic massage programs with different experiences and 6 massage styles using techniques such as rubbing, pressing, kneading, and stroking'),(113,'bao','Packback - Yonex BA02326EX','balo1.png',27,'Yonex BA02326EX is a meticulously crafted bag model with a spacious storage area, especially suitable for semi-professional and professional players who need to bring themselves many accessories and items for practice and competition. fight. With a fairly large capacity, you will comfortably store things without having to worry about capacity.'),(114,'baodo','Packback - BA02331WEX','balo2.png',27.5,'Badminton is not only a sport that creates joy and health, but also a cultural tradition and national pride. From daily practice sessions to international tournaments, badminton has fueled passion and blended with love for the homeland. Yonex Vietnam Flag Badminton Bag BA02331WEX White Red - Machining is the perfect symbol of this combination.'),(115,'ex63','String - Yonex Exbolt 63','exbolt63.png',9,'EXBOLT 63 is the latest badminton racket string model released by Yonex, outstanding with 11/10 power rating and with code JP - Domestic Japan, it will be even more premium!'),(116,'ex65','String - Yonex Exbolt 65','ex65.png',9,'Yonex Exbolt 65 badminton racket string is the latest string model just launched by Yonex in 2022 with parameters similar to 66 Ultimax fiber but is a stiffer string, this will definitely be the string model that many Brothers playing badminton waiting movement.'),(117,'balo','Packback - Yonex BA03212EX','balo3.png',80,'With meticulous and sturdy seams, Yonex BA03212EX White Blue - Machining offers an exterior design with the same quality as genuine product models but at a much cheaper price, suitable for those who Who needs to save money on investing in a backpack?'),(118,'axf','Racket - Lining Axforce 70','axforce70.png',140,'Axforce 70 Gray badminton racket (Code JP) has become the choice of top player Xu Chen in badminton matches. This proves the reliability and performance of this racket in professional competition environments.'),(119,'aero','Racket - Lining Aeronaut 9000i','li9000i.png',145,'The genuine Lining Aeronaut 9000i badminton racket will be integrated with the unique and exclusive technology of Lining\'s Aeronaut racket line, the Aeronaut Technology Platform, built on an aviation technology platform, with 4 toxic gas exhaust channels. Uniquely integrated into the head of the racket right at the T-joint, this significantly reduces air resistance when swinging the racket to help users exert accurate hand force, creating faster shots. Suitable for players with a natural attack style, fast speed, and neat finishing. Most especially, it will make a very catchy bridge sound!'),(120,'aero9d','Racket - Lining Aeronaut 9000d','li9000d.png',145,'Lining always has extremely eye-catching designs with modern details, impressive and harmonious colors, high-quality paint at the same time, the same goes for 9000D. Stands out with a strong, banana green paint color and brings a feeling of solidity and stability in the design of details in the same blue color. This is a racket that truly exceeds what you expected and invested in.'),(121,'halb','Racket - Lining Halbertech 8000','Halbertech.png',150,'The Domestic Lining Halbertec 8000 racket is inspired by Tai Chi and is not compatible with each other. Therefore, Lining designed the appearance of the racket with 2 eye-catching colors on both sides: pink and blue on the racket frame and lightly accented with white and black racket body. This is a very unique and extremely eye-catching design idea.');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sequence`
+--
+
+DROP TABLE IF EXISTS `sequence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sequence` (
+  `SEQ_NAME` varchar(50) NOT NULL,
+  `SEQ_COUNT` decimal(38,0) DEFAULT NULL,
+  PRIMARY KEY (`SEQ_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sequence`
+--
+
+LOCK TABLES `sequence` WRITE;
+/*!40000 ALTER TABLE `sequence` DISABLE KEYS */;
+INSERT INTO `sequence` VALUES ('SEQ_GEN',3450);
+/*!40000 ALTER TABLE `sequence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `USERID` bigint NOT NULL,
+  `ADDRESS1` varchar(255) DEFAULT NULL,
+  `ADDRESS2` varchar(255) DEFAULT NULL,
+  `CITY` varchar(255) DEFAULT NULL,
+  `COMPANYNAME` varchar(255) DEFAULT NULL,
+  `COUNTRY` varchar(255) DEFAULT NULL,
+  `CREDITCARDEXPIRATIONDATE` varchar(255) DEFAULT NULL,
+  `CREDITCARDNUMBER` varchar(255) DEFAULT NULL,
+  `CREDITCARDTYPE` varchar(255) DEFAULT NULL,
+  `EMAIL` varchar(255) DEFAULT NULL,
+  `FIRSTNAME` varchar(255) DEFAULT NULL,
+  `LASTNAME` varchar(255) DEFAULT NULL,
+  `ST` varchar(255) DEFAULT NULL,
+  `ZIP` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`USERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (3351,'14A, NGUYEN VAN TIEN, TAN TRU, LONG AN','136 CONG HOA, TAN BINH, HO CHI MINH','LONG AN','UTE','Việt Nam','01/2023','1212','Visa','thangle300403@gmail.com','LE','THANG','LONG AN','850000');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userpass`
+--
+
+DROP TABLE IF EXISTS `userpass`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `userpass` (
+  `Username` varchar(15) NOT NULL,
+  `Password` varchar(15) NOT NULL,
+  PRIMARY KEY (`Username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userpass`
+--
+
+LOCK TABLES `userpass` WRITE;
+/*!40000 ALTER TABLE `userpass` DISABLE KEYS */;
+INSERT INTO `userpass` VALUES ('andrea','sesame'),('anne','sesame'),('Walter','sesame');
+/*!40000 ALTER TABLE `userpass` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userrole`
+--
+
+DROP TABLE IF EXISTS `userrole`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `userrole` (
+  `Username` varchar(15) NOT NULL,
+  `Rolename` varchar(15) NOT NULL,
+  PRIMARY KEY (`Username`,`Rolename`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userrole`
+--
+
+LOCK TABLES `userrole` WRITE;
+/*!40000 ALTER TABLE `userrole` DISABLE KEYS */;
+INSERT INTO `userrole` VALUES ('andrea','programmer'),('anne','service'),('Walter','programmer');
+/*!40000 ALTER TABLE `userrole` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-12-01 13:22:09

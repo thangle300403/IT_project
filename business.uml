@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>music.business</OriginalElement>
+  <nodes>
+    <node x="121.59518124943003" y="802.8038759007957">music.business.Cart</node>
+    <node x="281.05201930220153" y="1058.1839661035647">music.business.Invoice</node>
+    <node x="419.9609996034703" y="234.59652182720572">music.business.User</node>
+    <node x="19.443505947890174" y="-13.533532956807448">music.business.product</node>
+    <node x="107.25286834516592" y="485.264488515978">music.business.LineItem</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="music.business.Invoice" target="music.business.LineItem" relationship="TO_MANY">
+      <point x="-32.05201930220153" y="-187.9999661035647" />
+      <point x="396.5" y="773.0" />
+      <point x="232.753" y="773.0" />
+      <point x="1.3165483407817646E-4" y="127.99951148402205" />
+    </edge>
+    <edge source="music.business.Cart" target="music.business.LineItem" relationship="TO_MANY">
+      <point x="-1.8124943002106875E-4" y="-91.9998759007957" />
+      <point x="238.595" y="773.0" />
+      <point x="232.753" y="773.0" />
+      <point x="1.3165483407817646E-4" y="127.99951148402205" />
+    </edge>
+    <edge source="music.business.Invoice" target="music.business.User" relationship="TO_ONE">
+      <point x="0.0" y="-188.0" />
+      <point x="-142.4089803012688" y="380.0" />
+    </edge>
+    <edge source="music.business.LineItem" target="music.business.product" relationship="TO_ONE">
+      <point x="-87.80936239727575" y="-128.0" />
+      <point x="0.0" y="212.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.3757658270932609" showDependencies="true" x="380.5" y="757.6903443478261" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
